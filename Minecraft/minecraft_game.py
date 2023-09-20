@@ -10,19 +10,26 @@ block_pick = 1
 sky = load_texture('texture\skybox.png')
 arm = load_texture('arm_texture.png')
 punch_sound = Audio('texture\punch_sound.wav', loop = False, autoplay= False)
-
+hud_1 = load_texture('brick_block.png')
 window.exit_button.visible = False
+h = hud_1
 
 
 def update():
-    global block_pick
+    global block_pick, h
+
 
     if held_keys['left mouse'] or held_keys['right mouse']:
         hand.active()
     else:
         hand.passive()
-    if held_keys['1']: block_pick = 1
-    if held_keys['2']: block_pick = 2
+        
+    if held_keys['1']:
+        block_pick = 1
+        h = Entity(parent = camera.ui, model = 'quad', texture = hud_1,scale = 0.5, position= (0,-0.4,1))
+    if held_keys['2']:
+        block_pick = 2
+        h.visible = False
     if held_keys['3']: block_pick = 3
     if held_keys['4']: block_pick = 4
 
@@ -77,21 +84,21 @@ class Hand(Entity):
             texture = arm,
             scale = 0.2,
             rotation = Vec3(150, -10, 0),
-            position = Vec2(0.4,-0.6))
+            position = Vec2(0.6,-0.6))
         
     def active(self):
         self.rotation = Vec3(150, -10, 0),
-        self.position = Vec2(0.3,-0.5)
+        self.position = Vec2(0.5,-0.5)
 
     def passive(self):
-        self.position = Vec2(0.4,-0.6)
+        self.position = Vec2(0.6,-0.6)
 
 for z in range(20):
     for x in range(20):
         voxel = Voxel(position= (x,0,z))
 
+
 firstperson = FirstPersonController()
 sky = Sky()
 hand = Hand()
-
 app.run()
